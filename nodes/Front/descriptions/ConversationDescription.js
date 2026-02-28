@@ -121,18 +121,24 @@ exports.conversationFields = [
                 description: 'Filter by conversation status',
             },
             {
-                displayName: 'Inbox ID',
+                displayName: 'Inbox',
                 name: 'inbox_id',
-                type: 'string',
+                type: 'options',
+                typeOptions: {
+                    loadOptionsMethod: 'getInboxes',
+                },
                 default: '',
-                description: 'Filter by inbox ID',
+                description: 'Filter by inbox',
             },
             {
-                displayName: 'Tag ID',
+                displayName: 'Tag',
                 name: 'tag_id',
-                type: 'string',
+                type: 'options',
+                typeOptions: {
+                    loadOptionsMethod: 'getTags',
+                },
                 default: '',
-                description: 'Filter by tag ID',
+                description: 'Filter by tag',
             },
         ],
     },
@@ -236,11 +242,14 @@ exports.conversationFields = [
                 description: 'Status of the conversation',
             },
             {
-                displayName: 'Assignee ID',
+                displayName: 'Assignee',
                 name: 'assignee_id',
-                type: 'string',
+                type: 'options',
+                typeOptions: {
+                    loadOptionsMethod: 'getTeammates',
+                },
                 default: '',
-                description: 'Teammate ID to assign the conversation to',
+                description: 'Teammate to assign the conversation to',
             },
             {
                 displayName: 'Tag IDs',

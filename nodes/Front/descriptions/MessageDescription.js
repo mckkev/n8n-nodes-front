@@ -117,9 +117,12 @@ exports.messageFields = [
     //         message:send
     // ----------------------------------
     {
-        displayName: 'Channel ID',
+        displayName: 'Channel',
         name: 'channelId',
-        type: 'string',
+        type: 'options',
+        typeOptions: {
+            loadOptionsMethod: 'getChannels',
+        },
         required: true,
         displayOptions: {
             show: {
@@ -128,7 +131,7 @@ exports.messageFields = [
             },
         },
         default: '',
-        description: 'The ID of the channel to send the message from',
+        description: 'The channel to send the message from',
     },
     {
         displayName: 'To',
@@ -295,11 +298,14 @@ exports.messageFields = [
                 description: 'Name of the binary property in the input data that holds the file to attach',
             },
             {
-                displayName: 'Channel ID',
+                displayName: 'Channel',
                 name: 'channel_id',
-                type: 'string',
+                type: 'options',
+                typeOptions: {
+                    loadOptionsMethod: 'getChannels',
+                },
                 default: '',
-                description: 'The ID of the channel to send the reply from',
+                description: 'The channel to send the reply from',
             },
             {
                 displayName: 'Subject',
@@ -314,9 +320,12 @@ exports.messageFields = [
     //         message:import
     // ----------------------------------
     {
-        displayName: 'Inbox ID',
+        displayName: 'Inbox',
         name: 'inboxId',
-        type: 'string',
+        type: 'options',
+        typeOptions: {
+            loadOptionsMethod: 'getInboxes',
+        },
         required: true,
         displayOptions: {
             show: {
@@ -325,7 +334,7 @@ exports.messageFields = [
             },
         },
         default: '',
-        description: 'The ID of the inbox to import the message into',
+        description: 'The inbox to import the message into',
     },
     {
         displayName: 'Sender Handle',
@@ -441,11 +450,14 @@ exports.messageFields = [
                 description: 'Type of the imported message',
             },
             {
-                displayName: 'Assignee ID',
+                displayName: 'Assignee',
                 name: 'assignee_id',
-                type: 'string',
+                type: 'options',
+                typeOptions: {
+                    loadOptionsMethod: 'getTeammates',
+                },
                 default: '',
-                description: 'Teammate ID to assign the conversation to',
+                description: 'Teammate to assign the conversation to',
             },
             {
                 displayName: 'Tags',

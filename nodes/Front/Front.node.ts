@@ -1,6 +1,8 @@
 import {
 	IExecuteFunctions,
+	ILoadOptionsFunctions,
 	INodeExecutionData,
+	INodePropertyOptions,
 	INodeType,
 	INodeTypeDescription,
 	IDataObject,
@@ -136,6 +138,39 @@ export class Front implements INodeType {
 			...inboxOperations,
 			...inboxFields,
 		],
+	};
+
+	methods = {
+		loadOptions: {
+			async getChannels(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await frontApiRequestAllItems.call(this, 'GET', '/channels');
+				return response.map((channel: IDataObject) => ({
+					name: `${channel.name || channel.address || channel.id} (${channel.type || 'unknown'})`,
+					value: channel.id as string,
+				}));
+			},
+			async getInboxes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await frontApiRequestAllItems.call(this, 'GET', '/inboxes');
+				return response.map((inbox: IDataObject) => ({
+					name: inbox.name as string || inbox.id as string,
+					value: inbox.id as string,
+				}));
+			},
+			async getTeammates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await frontApiRequestAllItems.call(this, 'GET', '/teammates');
+				return response.map((teammate: IDataObject) => ({
+					name: `${teammate.first_name || ''} ${teammate.last_name || ''}`.trim() || teammate.email as string,
+					value: teammate.id as string,
+				}));
+			},
+			async getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await frontApiRequestAllItems.call(this, 'GET', '/tags');
+				return response.map((tag: IDataObject) => ({
+					name: tag.name as string || tag.id as string,
+					value: tag.id as string,
+				}));
+			},
+		},
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {

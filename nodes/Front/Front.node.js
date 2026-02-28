@@ -99,6 +99,38 @@ class Front {
                 ...InboxDescription_1.inboxFields,
             ],
         };
+        this.methods = {
+            loadOptions: {
+                async getChannels() {
+                    const response = await GenericFunctions_1.frontApiRequestAllItems.call(this, 'GET', '/channels');
+                    return response.map((channel) => ({
+                        name: `${channel.name || channel.address || channel.id} (${channel.type || 'unknown'})`,
+                        value: channel.id,
+                    }));
+                },
+                async getInboxes() {
+                    const response = await GenericFunctions_1.frontApiRequestAllItems.call(this, 'GET', '/inboxes');
+                    return response.map((inbox) => ({
+                        name: inbox.name || inbox.id,
+                        value: inbox.id,
+                    }));
+                },
+                async getTeammates() {
+                    const response = await GenericFunctions_1.frontApiRequestAllItems.call(this, 'GET', '/teammates');
+                    return response.map((teammate) => ({
+                        name: `${teammate.first_name || ''} ${teammate.last_name || ''}`.trim() || teammate.email,
+                        value: teammate.id,
+                    }));
+                },
+                async getTags() {
+                    const response = await GenericFunctions_1.frontApiRequestAllItems.call(this, 'GET', '/tags');
+                    return response.map((tag) => ({
+                        name: tag.name || tag.id,
+                        value: tag.id,
+                    }));
+                },
+            },
+        };
     }
     async execute() {
         var _a, _b;
