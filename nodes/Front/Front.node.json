@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-front.Front",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Communication"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://dev.frontapp.com/reference/authentication"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://dev.frontapp.com/reference/introduction"
+			}
+		]
+	}
+}

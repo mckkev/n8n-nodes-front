@@ -1,0 +1,55 @@
+{
+  "name": "n8n-nodes-front",
+  "version": "0.1.0",
+  "description": "n8n community node for Front.com",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "front",
+    "front.com",
+    "customer support"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/kmckillop/n8n-nodes-front",
+  "author": {
+    "name": "Kevin McKillop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmckillop/n8n-nodes-front.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "credentials",
+    "nodes"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "credentials/FrontApi.credentials.js"
+    ],
+    "nodes": [
+      "nodes/Front/Front.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-n8n-nodes-base": "^1.11.0",
+    "n8n-workflow": "^1.0.0",
+    "prettier": "^2.7.1",
+    "typescript": "~5.1.6"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {}
+}
