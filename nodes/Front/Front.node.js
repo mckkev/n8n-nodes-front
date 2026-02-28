@@ -141,13 +141,14 @@ class Front {
                     else if (operation === 'search') {
                         const query = this.getNodeParameter('query', i);
                         const returnAll = this.getNodeParameter('returnAll', i);
+                        const encodedQuery = encodeURIComponent(query);
                         if (returnAll) {
-                            const responseData = await GenericFunctions_1.frontApiRequestAllItems.call(this, 'GET', '/conversations/search', {}, { q: query });
+                            const responseData = await GenericFunctions_1.frontApiRequestAllItems.call(this, 'GET', `/conversations/search/${encodedQuery}`);
                             returnData.push.apply(returnData, responseData);
                         }
                         else {
                             const limit = this.getNodeParameter('limit', i);
-                            const responseData = await GenericFunctions_1.frontApiRequest.call(this, 'GET', '/conversations/search', {}, { q: query, limit });
+                            const responseData = await GenericFunctions_1.frontApiRequest.call(this, 'GET', `/conversations/search/${encodedQuery}`, {}, { limit });
                             returnData.push.apply(returnData, responseData._results || []);
                         }
                     }
@@ -286,19 +287,35 @@ class Front {
                         const inboxId = this.getNodeParameter('inboxId', i);
                         const sender = this.getNodeParameter('sender', i);
                         const messageBody = this.getNodeParameter('body', i);
+                        const to = this.getNodeParameter('to', i).split(',').map(e => e.trim()).filter(Boolean);
+                        const externalId = this.getNodeParameter('externalId', i);
+                        const createdAt = this.getNodeParameter('createdAt', i);
                         const additionalFields = this.getNodeParameter('additionalFields', i);
-                        const requestBody = {
-                            sender: { handle: sender },
-                            body: messageBody,
-                        };
+                        const senderObj = { handle: sender };
                         if (additionalFields.sender_name) {
-                            requestBody.sender.name = additionalFields.sender_name;
+                            senderObj.name = additionalFields.sender_name;
                         }
+                        const requestBody = {
+                            sender: senderObj,
+                            to,
+                            body: messageBody,
+                            external_id: externalId,
+                            created_at: createdAt,
+                            metadata: {
+                                is_inbound: true,
+                            },
+                        };
                         if (additionalFields.subject) {
                             requestBody.subject = additionalFields.subject;
                         }
-                        if (additionalFields.created_at) {
-                            requestBody.created_at = additionalFields.created_at;
+                        if (additionalFields.type) {
+                            requestBody.metadata.type = additionalFields.type;
+                        }
+                        if (additionalFields.assignee_id) {
+                            requestBody.assignee_id = additionalFields.assignee_id;
+                        }
+                        if (additionalFields.tags) {
+                            requestBody.tags = additionalFields.tags.split(',').map(t => t.trim()).filter(Boolean);
                         }
                         const responseData = await GenericFunctions_1.frontApiRequest.call(this, 'POST', `/inboxes/${inboxId}/imported_messages`, requestBody);
                         returnData.push(responseData);

@@ -363,6 +363,48 @@ export const messageFields: INodeProperties[] = [
 		description: 'Body of the message',
 	},
 	{
+		displayName: 'To',
+		name: 'to',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['import'],
+			},
+		},
+		default: '',
+		description: 'Recipient email address(es), comma-separated',
+	},
+	{
+		displayName: 'External ID',
+		name: 'externalId',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['import'],
+			},
+		},
+		default: '',
+		description: 'External identifier for the message (must be unique)',
+	},
+	{
+		displayName: 'Created At',
+		name: 'createdAt',
+		type: 'number',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['import'],
+			},
+		},
+		default: 0,
+		description: 'Unix timestamp (seconds) when the message was created',
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',
@@ -376,13 +418,6 @@ export const messageFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Created At',
-				name: 'created_at',
-				type: 'number',
-				default: 0,
-				description: 'Unix timestamp when the message was created',
-			},
-			{
 				displayName: 'Sender Name',
 				name: 'sender_name',
 				type: 'string',
@@ -395,6 +430,33 @@ export const messageFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Subject of the message',
+			},
+			{
+				displayName: 'Type',
+				name: 'type',
+				type: 'options',
+				options: [
+					{ name: 'Email', value: 'email' },
+					{ name: 'SMS', value: 'sms' },
+					{ name: 'Intercom', value: 'intercom' },
+					{ name: 'Custom', value: 'custom' },
+				],
+				default: 'email',
+				description: 'Type of the imported message',
+			},
+			{
+				displayName: 'Assignee ID',
+				name: 'assignee_id',
+				type: 'string',
+				default: '',
+				description: 'Teammate ID to assign the conversation to',
+			},
+			{
+				displayName: 'Tags',
+				name: 'tags',
+				type: 'string',
+				default: '',
+				description: 'Comma-separated tag names to apply',
 			},
 		],
 	},

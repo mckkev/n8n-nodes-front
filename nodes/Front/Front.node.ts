@@ -191,14 +191,13 @@ export class Front implements INodeType {
 					} else if (operation === 'search') {
 						const query = this.getNodeParameter('query', i) as string;
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-	
+							const encodedQuery = encodeURIComponent(query);
+
 						if (returnAll) {
 							const responseData = await frontApiRequestAllItems.call(
 								this,
 								'GET',
-								'/conversations/search',
-								{},
-								{ q: query },
+								`/conversations/search/${encodedQuery}`,
 							);
 							returnData.push.apply(returnData, responseData);
 						} else {
@@ -206,9 +205,9 @@ export class Front implements INodeType {
 							const responseData = await frontApiRequest.call(
 								this,
 								'GET',
-								'/conversations/search',
+								`/conversations/search/${encodedQuery}`,
 								{},
-								{ q: query, limit },
+								{ limit },
 							);
 							returnData.push.apply(returnData, responseData._results || []);
 						}
@@ -371,21 +370,38 @@ export class Front implements INodeType {
 						const inboxId = this.getNodeParameter('inboxId', i) as string;
 						const sender = this.getNodeParameter('sender', i) as string;
 						const messageBody = this.getNodeParameter('body', i) as string;
+						const to = (this.getNodeParameter('to', i) as string).split(',').map(e => e.trim()).filter(Boolean);
+						const externalId = this.getNodeParameter('externalId', i) as string;
+						const createdAt = this.getNodeParameter('createdAt', i) as number;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
 
+						const senderObj: IDataObject = { handle: sender };
+						if (additionalFields.sender_name) {
+							senderObj.name = additionalFields.sender_name;
+						}
+
 						const requestBody: IDataObject = {
-							sender: { handle: sender },
+							sender: senderObj,
+							to,
 							body: messageBody,
+							external_id: externalId,
+							created_at: createdAt,
+							metadata: {
+								is_inbound: true,
+							},
 						};
 
-						if (additionalFields.sender_name) {
-							(requestBody.sender as IDataObject).name = additionalFields.sender_name;
-						}
 						if (additionalFields.subject) {
 							requestBody.subject = additionalFields.subject;
 						}
-						if (additionalFields.created_at) {
-							requestBody.created_at = additionalFields.created_at;
+						if (additionalFields.type) {
+							(requestBody.metadata as IDataObject).type = additionalFields.type;
+						}
+						if (additionalFields.assignee_id) {
+							requestBody.assignee_id = additionalFields.assignee_id;
+						}
+						if (additionalFields.tags) {
+							requestBody.tags = (additionalFields.tags as string).split(',').map(t => t.trim()).filter(Boolean);
 						}
 
 						const responseData = await frontApiRequest.call(
